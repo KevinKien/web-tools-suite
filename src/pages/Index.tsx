@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { 
   QrCode, Link, Binary, KeyRound, Hash, FileDigit, KeySquare,
-  Fingerprint, Braces, Clock, LayoutGrid, StickyNote
+  Fingerprint, Braces, Clock, LayoutGrid, StickyNote, GitCompare, ListX
 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Navigation } from "@/components/Navigation";
@@ -16,6 +16,8 @@ import { UUIDTool } from "@/components/tools/UUIDTool";
 import { JSONFormatterTool } from "@/components/tools/JSONFormatterTool";
 import { TimestampTool } from "@/components/tools/TimestampTool";
 import NotesTool from "@/components/tools/NotesTool";
+import { TextDiffTool } from "@/components/tools/TextDiffTool";
+import { RemoveDuplicatesTool } from "@/components/tools/RemoveDuplicatesTool";
 
 const navItems = [
   { id: "qrcode", label: "QR Code", icon: QrCode },
@@ -29,6 +31,8 @@ const navItems = [
   { id: "json", label: "JSON", icon: Braces },
   { id: "timestamp", label: "Timestamp", icon: Clock },
   { id: "notes", label: "Notes", icon: StickyNote },
+  { id: "diff", label: "Text Diff", icon: GitCompare },
+  { id: "duplicates", label: "Duplicates", icon: ListX },
 ];
 
 const Index = () => {
@@ -49,6 +53,8 @@ const Index = () => {
           <JSONFormatterTool />
           <TimestampTool />
           <NotesTool />
+          <TextDiffTool />
+          <RemoveDuplicatesTool />
         </div>
       );
     }
@@ -65,6 +71,8 @@ const Index = () => {
       json: <JSONFormatterTool />,
       timestamp: <TimestampTool />,
       notes: <NotesTool />,
+      diff: <TextDiffTool />,
+      duplicates: <RemoveDuplicatesTool />,
     };
 
     return (
