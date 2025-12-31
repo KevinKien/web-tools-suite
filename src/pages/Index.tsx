@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { 
   QrCode, Link, Binary, KeyRound, Hash, FileDigit, KeySquare,
-  Fingerprint, Braces, Clock, LayoutGrid, StickyNote, GitCompare, ListX
+  Fingerprint, Braces, Clock, LayoutGrid, StickyNote, GitCompare, ListX, Regex
 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Navigation } from "@/components/Navigation";
@@ -18,6 +18,7 @@ import { TimestampTool } from "@/components/tools/TimestampTool";
 import NotesTool from "@/components/tools/NotesTool";
 import { TextDiffTool } from "@/components/tools/TextDiffTool";
 import { RemoveDuplicatesTool } from "@/components/tools/RemoveDuplicatesTool";
+import { RegexTesterTool } from "@/components/tools/RegexTesterTool";
 
 const navItems = [
   { id: "qrcode", label: "QR Code", icon: QrCode },
@@ -33,6 +34,7 @@ const navItems = [
   { id: "notes", label: "Notes", icon: StickyNote },
   { id: "diff", label: "Text Diff", icon: GitCompare },
   { id: "duplicates", label: "Duplicates", icon: ListX },
+  { id: "regex", label: "Regex", icon: Regex },
 ];
 
 const Index = () => {
@@ -55,6 +57,7 @@ const Index = () => {
           <NotesTool />
           <TextDiffTool />
           <RemoveDuplicatesTool />
+          <RegexTesterTool />
         </div>
       );
     }
@@ -73,6 +76,7 @@ const Index = () => {
       notes: <NotesTool />,
       diff: <TextDiffTool />,
       duplicates: <RemoveDuplicatesTool />,
+      regex: <RegexTesterTool />,
     };
 
     return (
