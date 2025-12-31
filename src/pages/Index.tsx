@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { QrCode, Link, Binary, KeyRound, Hash, FileDigit, KeySquare } from "lucide-react";
+import { 
+  QrCode, Link, Binary, KeyRound, Hash, FileDigit, KeySquare,
+  Fingerprint, Braces, Clock, LayoutGrid
+} from "lucide-react";
 import { Header } from "@/components/Header";
 import { Navigation } from "@/components/Navigation";
 import { QRCodeTool } from "@/components/tools/QRCodeTool";
@@ -9,6 +12,9 @@ import { JWTTool } from "@/components/tools/JWTTool";
 import { SHA256Tool } from "@/components/tools/SHA256Tool";
 import { MD5Tool } from "@/components/tools/MD5Tool";
 import { PasswordGeneratorTool } from "@/components/tools/PasswordGeneratorTool";
+import { UUIDTool } from "@/components/tools/UUIDTool";
+import { JSONFormatterTool } from "@/components/tools/JSONFormatterTool";
+import { TimestampTool } from "@/components/tools/TimestampTool";
 
 const navItems = [
   { id: "qrcode", label: "QR Code", icon: QrCode },
@@ -18,6 +24,9 @@ const navItems = [
   { id: "sha256", label: "SHA256", icon: Hash },
   { id: "md5", label: "MD5", icon: FileDigit },
   { id: "password", label: "Password", icon: KeySquare },
+  { id: "uuid", label: "UUID", icon: Fingerprint },
+  { id: "json", label: "JSON", icon: Braces },
+  { id: "timestamp", label: "Timestamp", icon: Clock },
 ];
 
 const Index = () => {
@@ -34,6 +43,9 @@ const Index = () => {
           <SHA256Tool />
           <MD5Tool />
           <PasswordGeneratorTool />
+          <UUIDTool />
+          <JSONFormatterTool />
+          <TimestampTool />
         </div>
       );
     }
@@ -46,6 +58,9 @@ const Index = () => {
       sha256: <SHA256Tool />,
       md5: <MD5Tool />,
       password: <PasswordGeneratorTool />,
+      uuid: <UUIDTool />,
+      json: <JSONFormatterTool />,
+      timestamp: <TimestampTool />,
     };
 
     return (
@@ -71,7 +86,7 @@ const Index = () => {
         </div>
 
         <Navigation 
-          items={[{ id: "all", label: "All Tools", icon: QrCode }, ...navItems]}
+          items={[{ id: "all", label: "All Tools", icon: LayoutGrid }, ...navItems]}
           activeItem={activeCategory}
           onItemClick={setActiveCategory}
         />
