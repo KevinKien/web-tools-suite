@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { Plus, Trash2, Save, FileText } from "lucide-react";
+import { Plus, Trash2, FileText, Check } from "lucide-react";
 
 interface Note {
   id: string;
@@ -20,6 +20,7 @@ const NotesTool = () => {
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [isSaved, setIsSaved] = useState(true);
 
   // Load notes from localStorage on mount
   useEffect(() => {
@@ -39,28 +40,8 @@ const NotesTool = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
   }, [notes]);
 
-  const createNewNote = () => {
-    const newNote: Note = {
-      id: crypto.randomUUID(),
-      title: "Untitled Note",
-      content: "",
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    };
-    setNotes((prev) => [newNote, ...prev]);
-    setSelectedNote(newNote);
-    setTitle(newNote.title);
-    setContent(newNote.content);
-    toast.success("New note created");
-  };
-
-  const selectNote = (note: Note) => {
-    setSelectedNote(note);
-    setTitle(note.title);
-    setContent(note.content);
-  };
-
-  const saveNote = () => {
+  // Auto-save with debounce
+  const saveNote = useCallback(() => {
     if (!selectedNote) return;
 
     const updatedNote: Note = {
@@ -74,7 +55,42 @@ const NotesTool = () => {
       prev.map((n) => (n.id === selectedNote.id ? updatedNote : n))
     );
     setSelectedNote(updatedNote);
-    toast.success("Note saved");
+    setIsSaved(true);
+  }, [selectedNote, title, content]);
+
+  // Auto-save effect with debounce
+  useEffect(() => {
+    if (!selectedNote) return;
+    
+    setIsSaved(false);
+    const timer = setTimeout(() => {
+      saveNote();
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [title, content]);
+
+  const createNewNote = () => {
+    const newNote: Note = {
+      id: crypto.randomUUID(),
+      title: "Untitled Note",
+      content: "",
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+    setNotes((prev) => [newNote, ...prev]);
+    setSelectedNote(newNote);
+    setTitle(newNote.title);
+    setContent(newNote.content);
+    setIsSaved(true);
+    toast.success("New note created");
+  };
+
+  const selectNote = (note: Note) => {
+    setSelectedNote(note);
+    setTitle(note.title);
+    setContent(note.content);
+    setIsSaved(true);
   };
 
   const deleteNote = (noteId: string) => {
@@ -166,10 +182,16 @@ const NotesTool = () => {
                   placeholder="Note title..."
                   className="flex-1 bg-background"
                 />
-                <Button onClick={saveNote} size="sm">
-                  <Save className="w-4 h-4 mr-2" />
-                  Save
-                </Button>
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                  {isSaved ? (
+                    <>
+                      <Check className="w-3 h-3 text-green-500" />
+                      <span>Saved</span>
+                    </>
+                  ) : (
+                    <span>Saving...</span>
+                  )}
+                </div>
               </div>
               <Textarea
                 value={content}
