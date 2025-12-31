@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { 
   QrCode, Link, Binary, KeyRound, Hash, FileDigit, KeySquare,
-  Fingerprint, Braces, Clock, LayoutGrid
+  Fingerprint, Braces, Clock, LayoutGrid, StickyNote
 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Navigation } from "@/components/Navigation";
@@ -15,6 +15,7 @@ import { PasswordGeneratorTool } from "@/components/tools/PasswordGeneratorTool"
 import { UUIDTool } from "@/components/tools/UUIDTool";
 import { JSONFormatterTool } from "@/components/tools/JSONFormatterTool";
 import { TimestampTool } from "@/components/tools/TimestampTool";
+import NotesTool from "@/components/tools/NotesTool";
 
 const navItems = [
   { id: "qrcode", label: "QR Code", icon: QrCode },
@@ -27,6 +28,7 @@ const navItems = [
   { id: "uuid", label: "UUID", icon: Fingerprint },
   { id: "json", label: "JSON", icon: Braces },
   { id: "timestamp", label: "Timestamp", icon: Clock },
+  { id: "notes", label: "Notes", icon: StickyNote },
 ];
 
 const Index = () => {
@@ -46,6 +48,7 @@ const Index = () => {
           <UUIDTool />
           <JSONFormatterTool />
           <TimestampTool />
+          <NotesTool />
         </div>
       );
     }
@@ -61,6 +64,7 @@ const Index = () => {
       uuid: <UUIDTool />,
       json: <JSONFormatterTool />,
       timestamp: <TimestampTool />,
+      notes: <NotesTool />,
     };
 
     return (
