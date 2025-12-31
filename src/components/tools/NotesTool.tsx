@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { Plus, Trash2, FileText, Check } from "lucide-react";
+import { Plus, Trash2, FileText, Check, Search } from "lucide-react";
 
 interface Note {
   id: string;
@@ -21,6 +21,17 @@ const NotesTool = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [isSaved, setIsSaved] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter notes based on search query
+  const filteredNotes = notes.filter((note) => {
+    if (!searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      note.title.toLowerCase().includes(query) ||
+      note.content.toLowerCase().includes(query)
+    );
+  });
 
   // Load notes from localStorage on mount
   useEffect(() => {
@@ -117,22 +128,31 @@ const NotesTool = () => {
       <div className="flex gap-4 h-[500px]">
         {/* Notes List */}
         <div className="w-1/3 border border-border rounded-lg overflow-hidden flex flex-col">
-          <div className="p-3 border-b border-border bg-muted/30">
+          <div className="p-3 border-b border-border bg-muted/30 space-y-2">
             <Button onClick={createNewNote} className="w-full" size="sm">
               <Plus className="w-4 h-4 mr-2" />
               New Note
             </Button>
+            <div className="relative">
+              <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground" />
+              <Input
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search notes..."
+                className="h-8 pl-7 text-xs bg-background"
+              />
+            </div>
           </div>
           <div className="flex-1 overflow-y-auto">
-            {notes.length === 0 ? (
+            {filteredNotes.length === 0 ? (
               <div className="p-4 text-center text-muted-foreground">
                 <FileText className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                <p className="text-sm">No notes yet</p>
-                <p className="text-xs">Create your first note</p>
+                <p className="text-sm">{notes.length === 0 ? "No notes yet" : "No matching notes"}</p>
+                <p className="text-xs">{notes.length === 0 ? "Create your first note" : "Try a different search"}</p>
               </div>
             ) : (
               <div className="divide-y divide-border">
-                {notes.map((note) => (
+                {filteredNotes.map((note) => (
                   <div
                     key={note.id}
                     onClick={() => selectNote(note)}
