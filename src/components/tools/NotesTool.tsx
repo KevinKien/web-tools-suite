@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { Plus, Trash2, FileText, Check, Search } from "lucide-react";
+import { Plus, Trash2, FileText, Check, Search, X } from "lucide-react";
 
 interface Note {
   id: string;
@@ -22,6 +22,7 @@ const NotesTool = () => {
   const [content, setContent] = useState("");
   const [isSaved, setIsSaved] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
 
   // Filter notes based on search query
   const filteredNotes = notes.filter((note) => {
@@ -129,19 +130,34 @@ const NotesTool = () => {
         {/* Notes List */}
         <div className="w-1/3 border border-border rounded-lg overflow-hidden flex flex-col">
           <div className="p-3 border-b border-border bg-muted/30 space-y-2">
-            <Button onClick={createNewNote} className="w-full" size="sm">
-              <Plus className="w-4 h-4 mr-2" />
-              New Note
-            </Button>
-            <div className="relative">
-              <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground" />
-              <Input
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search notes..."
-                className="h-8 pl-7 text-xs bg-background"
-              />
+            <div className="flex gap-2">
+              <Button onClick={createNewNote} className="flex-1" size="sm">
+                <Plus className="w-4 h-4 mr-2" />
+                New Note
+              </Button>
+              <Button
+                variant={showSearch ? "secondary" : "outline"}
+                size="sm"
+                onClick={() => {
+                  setShowSearch(!showSearch);
+                  if (showSearch) setSearchQuery("");
+                }}
+              >
+                {showSearch ? <X className="w-4 h-4" /> : <Search className="w-4 h-4" />}
+              </Button>
             </div>
+            {showSearch && (
+              <div className="relative">
+                <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground" />
+                <Input
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search notes..."
+                  className="h-8 pl-7 text-xs bg-background"
+                  autoFocus
+                />
+              </div>
+            )}
           </div>
           <div className="flex-1 overflow-y-auto">
             {filteredNotes.length === 0 ? (
